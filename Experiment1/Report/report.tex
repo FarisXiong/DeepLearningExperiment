@@ -1,0 +1,151 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{dirtree}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{float}
+
+\title{深度学习实验一} 
+\author{1190200708 熊峰} 
+\date{\today}
+\begin{document} 
+\maketitle 
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{环境配置}
+\subsection{硬件配置}
+CPU : Intel(R) Xeon(R) Silver 4214 \par
+GPU : TITAN RTX 24G \par
+MEM : 128G RAM  \par
+\subsection{软件配置}
+OS : Ubuntu 20.04.1 LTS \par
+PyTorch : Stable 1.11.0  CUDA 11.3 \par
+IDE : PyCharm 2021.3.2 \par
+
+
+\section{代码编写}
+
+\subsection{数据读取}
+使用torchvision.datasets.MNIST函数下载训练集和测试集，并使用transform对数据预处理。将数据正则化，并转化为张量。\par
+在正式训练的时候使用data.DataLoader加载数据，并添加batch\_size。\par 
+\subsection{搭建网络}
+本实验实现了基于Pytorch的MLP及CNN的模型。\par
+本实验中MLP网络主要分为三层。\par
+第一层:将28*28维的向量映射为512维度的向量。\par
+第二层:将512维的向量映射为512维度的向量。\par
+第三层:将512维的向量映射为10维的向量。 \par
+
+本实验除了MLP网络，还搭建了CNN网络，CNN网络主要分为三层。\par
+第一层为卷积层，使用卷积核大小为(4,4)，out\_channel设置为64，用于识别不同的模式。\par 
+第二层为池化层，缩小参数矩阵。\par
+第三层为全连接层，将数据映射为所需结果的维度。\par
+
+\subsection{定义优化器}
+优化器选择为Adam优化器。
+\subsection{定义损失函数并训练}
+本任务为多分类任务，因此将损失函数定义为交叉熵函数。
+
+\section{实验验证}
+\subsection{实验相关设置}
+训练轮数 : 100(若十轮以内验证集上没有优化，则结束训练)\par
+训练设备 : GPU\par 
+学习率 : 1e-5\par 
+\subsection{训练过程}
+实验使用tensorboard记录实验过程的数据。\par
+\subsubsection{MLP}
+
+在训练12000轮后，实验结果趋于收敛。\par
+\begin{figure}[H]
+    % \flushleft
+    \begin{center}
+        \includegraphics[width=12cm]{\string"MlpAcc".png}
+    \caption{准确率}
+    \label{fig:1}
+    \end{center}
+    \end{figure}
+\par
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"MlpLoss".png}
+    \caption{LOSS}
+    \label{fig:2}
+    \end{center}
+    \end{figure}
+\par
+
+
+\subsubsection{CNN}
+
+在训练8000轮后，实验结果趋于收敛。\par
+\begin{figure}[H]
+    % \flushleft
+    \begin{center}
+        \includegraphics[width=12cm]{\string"CnnAcc".png}
+    \caption{准确率}
+    \label{fig:3}
+    \end{center}
+    \end{figure}
+\par
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"CnnLoss".png}
+    \caption{LOSS}
+    \label{fig:4}
+    \end{center}
+    \end{figure}
+\par
+
+
+
+
+
+
+\subsection{实验结果}
+
+实验得到的Confusion Matrix如下图所示：
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.4]{\string"confusionMLP".png}
+    \caption{MLP Confusion Matrix}
+    \label{fig:5}
+    \end{center}
+    \end{figure}
+\par
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.4]{\string"confusionCNN".png}
+    \caption{CNN Confusion Matrix}
+    \label{fig:5}
+    \end{center}
+    \end{figure}
+\par
+
+实验结果如下表所示:
+
+\begin{center}
+    \begin{tabular}{||c c c||}
+    \hline
+    模型 & Acc & Micro F1\\ [0.5ex]
+    \hline\hline\hline
+    CNN & 97.52\% & 0.9751\\
+    MLP & 95.22\% & 0.9483\\
+    \hline
+   \end{tabular}
+   \end{center}
+
+
+\subsection{实验总结}
+
+通过动手实验MLP等模型，充实了理论的学习，收获颇丰。
+\end{document}
+
+
+
+
+
+

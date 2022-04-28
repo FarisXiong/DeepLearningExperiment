@@ -1,12 +1,19 @@
 /.idea
-/Experiment1/__pycache__
-/Experiment1/logs
-/Experiment1/report
-/Experiment1/dataset/MNIST/raw/
-!/Experiment1/report/acc.png
-!/Experiment1/report/loss.png
-!/Experiment1/report/report.tex
-!/Experiment1/report/report.pdf
+
+
+
+
+/Experiment1/Logs
+/Experiment1/Report/report.aux
+/Experiment1/Report/report.log
+/Experiment1/Report/report.synctex.gz
+/Experiment1/Report/report.toc
+/Experiment1/Code/dataset/MNIST/raw/
+
+
+
+
+
 
 
 
