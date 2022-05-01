@@ -1,0 +1,133 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{dirtree}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{float}
+
+\title{深度学习实验二} 
+\author{1190200708 熊峰} 
+\date{\today}
+\begin{document} 
+\maketitle 
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{环境配置}
+\subsection{硬件配置}
+CPU : Intel(R) Xeon(R) Silver 4214 \par
+GPU : TITAN RTX 24G \par
+MEM : 128G RAM  \par
+\subsection{软件配置}
+OS : Ubuntu 20.04.1 LTS \par
+PyTorch : Stable 1.11.0  CUDA 11.3 \par
+IDE : PyCharm 2021.3.2 \par
+
+
+\section{代码编写}
+
+\subsection{数据读取}
+将数据集下载好后，使用torchvision.transforms对数据预处理，将图片转化为Tensor，并正则化。\par
+接下来对torch.utils.data.Dataset继承，并实现自己的数据集，在此步骤将数据的标签映射为数字，方便计算交叉熵损失函数。\par
+在正式训练的时候使用data.DataLoader加载数据，并添加batch\_size。\par 
+\subsection{搭建网络}
+本实验实现了基于Pytorch的AlexNet、VGG16、InceptionV3、ResNet50、DenseNet121的模型。
+其中AlexNet、VGG16使用PyTorch搭建完整模型，其余网络主要加载PyTorch的预训练模型，并进一步训练。\par
+\subsubsection{AlexNet}
+AlexNet网络结构如图所示。
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"AlexNetModel".jpg}
+    \caption{AlexNet Model}
+    \label{fig:1}
+    \end{center}
+    \end{figure}
+\par
+原模型分为两部分在两个GPU中训练。
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"AlexNetModel1".png}
+    \caption{AlexNet Model}
+    \label{fig:2}
+    \end{center}
+    \end{figure}
+\par
+
+本模型将两部分合并，网络主要由五层卷积层，三层池化层，和三个全连接层组成，原始输入为3*224*224的张量。\par
+网络特点:在每个卷积层后加上ReLU激活函数，防止梯度消失问题，使整体收敛更快。使用Dropout避免过拟合。\par 
+网络初始化方法主要采用何恺明提出的初始化方法。\par
+网络结构(在卷积层后接ReLU，在线性层后接ReLU和DropOut):\par 
+第一层:卷积层, kernel\_size = (11,11), stride = 4, in\_channel = 3, out\_channel = 96, 此时输出的size = (227-11+0)/4+1 = 55.\par 
+第二层:池化层, kernel\_size = (3,3), stride = 2, 输出的size = (55-3)/2+1 = 27. \par 
+第三层:卷积层, kernel\_size = (5,5), padding = 2, 输出的size = (27-5+4)/1+1 = 27. \par 
+第四层:池化层, kernel\_size = (3,3), stride = 2, 输出的size = (27-3)/2+1 = 13. \par 
+第五层:卷积层, kernel\_size = (3,3), padding = 1, 输出的size = (13-3+2)/1+1 = 13. \par 
+第六层:卷积层, kernel\_size = (3,3), padding = 1, 输出的size = (13-3+2)/1+1 = 13. \par 
+第七层:池化层, kernel\_size = (3,3), stride = 2, 输出的size = (13-3)/2+1 = 6. \par 
+第八层:全连接层, in\_features = 9216, out\_features = 4096. \par 
+第九层:全连接层, in\_features = 4096, out\_features = 4096. \par 
+第十层:全连接层, in\_features = 4096, out\_features = 101. \par 
+
+
+\subsubsection{VGG16}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"VGG16Model".jpg}
+    \caption{VGG16 Model}
+    \label{fig:3}
+    \end{center}
+    \end{figure}
+\par
+本部分主要实现了VGG16模型。\par 
+第一部分经过两层卷积(在所有卷积操作后加上ReLU)，此时输出为64*224*224.\par
+第二部分经过一层池化层，再通过两层卷积层，此时输出为256*56*56.\par
+第三部分经过一层池化层，再通过三层卷积层，此时输出为512*14*14.\par
+第四部分经过一层池化层，此时输出为512*7*7.\par 
+第五部分主要为全连接层，将上一部分输出映射为101维的向量。\par
+
+\subsection{定义优化器}
+优化器选择为Adam优化器。
+
+\subsection{定义损失函数并训练}
+本任务为多分类任务，因此将损失函数定义为交叉熵函数。
+
+\section{实验验证}
+\subsection{实验相关设置}
+训练轮数 : 500(若五十轮以内验证集上没有优化，则结束训练)\par
+训练设备 : GPU\par 
+学习率 : 1e-5\par 
+\subsection{训练过程}
+实验使用tensorboard记录实验过程的数据。\par
+\subsubsection{AlexNet}
+
+
+\subsubsection{VGG16}
+
+\subsubsection{ResNet50}
+
+\subsubsection{InceptionV3}
+
+\subsubsection{DenseNet121}
+
+
+\subsection{实验结果}
+
+\begin{center}
+    \begin{tabular}{||c c c c c||}
+    \hline
+    模型 & Acc & Micro F1-Score & Macro F1-Score & Cross Entopy Loss\\ [0.5ex]
+    \hline
+    AlexNet & 69.48\% &  0.694841& 0.559827&0.741160\\
+    VGG16 & \% &  & &\\
+    InceptionV3 & 96.49\% & 0.964874 & 0.941263& 0.187301\\
+    ResNet50 & 96.93\% & 0.969264 & 0.953177 & 0.137866\\
+    DenseNet121 & 92.43\% &  0.924259 & 0.869438&0.338787\\
+    \hline
+   \end{tabular}
+   \end{center}
+\subsection{实验总结}
+
+
+\end{document}
