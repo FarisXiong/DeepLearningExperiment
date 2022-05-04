@@ -100,18 +100,70 @@ AlexNet网络结构如图所示。
 学习率 : 1e-5\par 
 \subsection{训练过程}
 实验使用tensorboard记录实验过程的数据。\par
+在自己搭建的网络中，训练收敛较慢，基于预训练模型训练速度较快。 \par
+
 \subsubsection{AlexNet}
 
 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"AlexNetTensorboard".png}
+    \caption{AlexNet Tensorboard}
+    \label{fig:4}
+    \end{center}
+    \end{figure}
+\par
+AlexNet网络训练约6000轮后收敛，在验证集上准确率大约为71\%。\par
+实验发现，对网络参数初始化对网络性能有较为明显的提升。\par
+
 \subsubsection{VGG16}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"VGGTensorboard".png}
+    \caption{VGG16 Tensorboard}
+    \label{fig:5}
+    \end{center}
+    \end{figure}
+\par
+VGG16网络训练约7000轮后收敛，在验证集上准确率大约为70\%。
+
 
 \subsubsection{ResNet50}
 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"ResNetTensorboard".png}
+    \caption{ResNet50 Tensorboard}
+    \label{fig:6}
+    \end{center}
+    \end{figure}
+\par
+ResNet50网络训练约3500轮后收敛，在验证集上准确率大约为97\%。
+
 \subsubsection{InceptionV3}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"InceptionTensorboard".png}
+    \caption{InceptionV3 Tensorboard}
+    \label{fig:7}
+    \end{center}
+    \end{figure}
+\par
+InceptionV3网络训练约2400轮后收敛，在验证集上准确率大约为96\%。
 
 \subsubsection{DenseNet121}
 
-
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"DenseNetTensorboard".png}
+    \caption{DenseNet121 Tensorboard}
+    \label{fig:8}
+    \end{center}
+    \end{figure}
+\par
+DenseNet121网络训练约8000轮后收敛，在验证集上准确率大约为95\%。
 \subsection{实验结果}
 
 \begin{center}
@@ -120,7 +172,7 @@ AlexNet网络结构如图所示。
     模型 & Acc & Micro F1-Score & Macro F1-Score & Cross Entopy Loss\\ [0.5ex]
     \hline
     AlexNet & 69.48\% &  0.694841& 0.559827&0.741160\\
-    VGG16 & \% &  & &\\
+    VGG16 & 68.28\% &  0.682766& 0.530221&1.800057\\
     InceptionV3 & 96.49\% & 0.964874 & 0.941263& 0.187301\\
     ResNet50 & 96.93\% & 0.969264 & 0.953177 & 0.137866\\
     DenseNet121 & 92.43\% &  0.924259 & 0.869438&0.338787\\
@@ -128,6 +180,6 @@ AlexNet网络结构如图所示。
    \end{tabular}
    \end{center}
 \subsection{实验总结}
-
+本次实验自己搭建网络，使我对深度学习的认知更加深刻，也学习到了更多。
 
 \end{document}
