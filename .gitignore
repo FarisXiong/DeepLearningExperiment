@@ -9,7 +9,7 @@
 /Experiment1/Report/report.synctex.gz
 /Experiment1/Report/report.toc
 /Experiment1/Code/dataset/MNIST/raw/
-
+/Experiment1/Code/__pycache__/
 
 
 
@@ -18,7 +18,10 @@
 /Experiment2/Caltech101
 /Experiment2/Code/__pycache__
 /Experiment2/Models
-
+/Experiment2/Report/report.aux
+/Experiment2/Report/report.log
+/Experiment2/Report/report.synctex.gz
+/Experiment2/Report/report.toc
 
 
 
