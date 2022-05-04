@@ -13,9 +13,18 @@ python3 train.py
 
 
 ## 实验二
+使用AlexNet对Caltech101分类。
 ```shell
-
-
+# 训练AlexNet
+python3 ./Experiment2/Code/train.py
+# 训练VGG16
+python3 ./Experiment2/Code/trainVGG.py
+# 训练ResNet50
+python3 ./Experiment2/Code/trainResNet.py
+# 训练InceptionV3
+python3 ./Experiment2/Code/trainInception.py
+# 训练DenseNet121
+python3 ./Experiment2/Code/trainDenseNet.py
 
 ```
 
