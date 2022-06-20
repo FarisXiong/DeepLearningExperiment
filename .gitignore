@@ -1,18 +1,11 @@
-/.idea
-
-
-
-
 /Experiment1/Logs
 /Experiment1/Report/report.aux
 /Experiment1/Report/report.log
 /Experiment1/Report/report.synctex.gz
 /Experiment1/Report/report.toc
-/Experiment1/Code/dataset/MNIST/raw/
+/Experiment1/Code/dataset
 /Experiment1/Code/__pycache__/
-
-
-
+/Experiment1/Models
 
 /Experiment2/Logs
 /Experiment2/Caltech101
@@ -23,9 +16,41 @@
 /Experiment2/Report/report.synctex.gz
 /Experiment2/Report/report.toc
 
+/Experiment3/Trains/
+/Experiment3/Report/Report.aux
+/Experiment3/Report/Report.log
+/Experiment3/Report/Report.synctex.gz
+/Experiment3/Report/Report.toc
+/Experiment3/Dataset
+/Experiment3/Code/__pycache__
 
+/Experiment4/Models/Logs
+/Experiment4/Models/Model
+/Experiment4/Models/pretrained
+/Experiment4/Dataset/
+/Experiment4/Code/__pycache__
+/Experiment4/Report/Report.aux
+/Experiment4/Report/Report.log
+/Experiment4/Report/Report.synctex.gz
+/Experiment4/Report/Report.toc
 
+/Experiment5/Code/Basic/__pycache__
+/Experiment5/Code/genforce/
+!/Experiment5/Code/genforce/sefa.py
+!/Experiment5/Code/genforce/work_dirs/synthesis/pggan_celebahq1024_N5_K5_seed0/frames/*
+!/Experiment5/Code/genforce/work_dirs/synthesis/pggan_celebahq1024_N5_K5_seed0/*.mov
+/Experiment5/Report/Report.aux
+/Experiment5/Report/Report.log
+/Experiment5/Report/Report.synctex.gz
+/Experiment5/Report/Report.toc
+/Experiment5/Trains/Models
 
-
+/Experiment6/Code/checkpoint-9120
+/Experiment6/Code/input
+/Experiment6/Code/pretrained
+/Experiment6/Report/Report.aux
+/Experiment6/Report/Report.log
+/Experiment6/Report/Report.synctex.gz
+/Experiment6/Report/Report.toc
 
 
