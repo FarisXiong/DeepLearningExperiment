@@ -1,0 +1,306 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{dirtree}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{float}
+
+\title{深度学习实验五} 
+\author{1190200708 熊峰} 
+\date{\today}
+\begin{document} 
+\maketitle 
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{环境配置}
+\subsection{硬件配置}
+CPU : Intel(R) Xeon(R) Silver 4214 \par
+GPU : TITAN RTX 24G \par
+MEM : 128G RAM  \par
+\subsection{软件配置}
+OS : Ubuntu 20.04.1 LTS \par
+PyTorch : Stable 1.11.0  CUDA 11.3 \par
+IDE : PyCharm 2021.3.2 \par
+
+
+\section{模型简介}
+
+\subsection{GAN}
+在Ian GoodFellow, Yoshua Bengio等人提出GAN\cite{goodfellow2014generative}时，大部分深度生成模型的工作集中在概率分布函数的参数化模型上，这些模型可以使用最大化对数似然函数训练，
+在这些模型中，最成功的或许是深度玻尔兹曼机，这些模型都有着难以计算的似然函数，需要对似然函数近似。\par 
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=8cm]{\string"GAN".png}
+    \caption{GAN Architecture}
+    \label{fig:1}
+    \end{center}
+    \end{figure}
+\par
+
+GAN是一个由两个模型组成的系统：判别器$D$和生成器$G$。
+判别器的任务是判断输入图像是源自数据集中还是由机器生成的。
+判别器一般使用二分类的神经网络来构建，一般将取自数据集的样本视为正样本，而生成的样本标注为负样本。
+生成器的任务是接收随机噪声，然后使用反卷积网络来创建一个图像。
+生成器的随机输入可以看做一个种子，相同的种子会得到相同的生成图像，不同的种子则得到的图像不同，大量种子的作用是保证生成图像的多样性。
+在GAN论文中使用了MLP搭建的生成模型和判别模型。\par 
+GAN的算法如下:\par 
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"GAN_Algorithm".png}
+    \caption{GAN Algorithm}
+    \label{fig:2}
+    \end{center}
+    \end{figure}
+\par
+
+
+
+\subsection{WGAN}
+原始GAN训练过程中经常会遇到:模式崩溃，生成器生成非常窄的分布，仅覆盖数据分布中的单一模式。 
+模式崩溃的含义是生成器只能生成非常相似的样本(例如，MNIST中的单个数字)，即生成的样本不是多样的。
+此外没有指标可以告诉我们收敛情况。
+生成器和判别器的loss并没有告诉我们任何收敛相关信息。
+当然，我们可以通过不时地查看生成器生成的数据来监控训练进度。
+但是，这是一个手动过程。因此，我们需要有一个可解释的指标可以告诉我们有关训练的进度。\par
+
+
+原始GAN的主要问题可以归结为:等价优化的距离衡量(JS散度)不合理，生成器随机初始化后的生成分布很难与真实分布有不可忽略的重叠。\par
+
+Wasserstein GAN(WGAN)\cite{arjovsky2017wasserstein}解决了上述两个问题。\par
+其使用Wasserstein距离衡量两个分布之间的距离，使用Wasserstein距离的好处是即使两个分布没有任何重叠，也可以反应他们之间的距离。\par
+WGAN的算法如下:\par 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"WGAN_Algorithm".png}
+    \caption{WGAN Algorithm}
+    \label{fig:3}
+    \end{center}
+    \end{figure}
+\par
+
+\subsection{WGAN-GP}
+训练不稳定是GAN常见的一个问题。
+虽然WGAN在稳定训练方面有了比较好的进步，但是有时也只能生成较差的样本，并且有时候也比较难收敛。
+原因在于:WGAN采用了权重修剪（weight clipping）策略来强行满足critic上的Lipschitz约束，
+这将导致训练过程产生一些不希望的行为。
+WGAN-GP\cite{gulrajani2017improved}提出了另一种截断修剪的策略gradient penalty，
+即惩罚critic相对于其输入的梯度的norm。\par 
+WGAN-GP的算法如下:\par 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"WGAN-GP_Algorithm".png}
+    \caption{WGAN-GP Algorithm}
+    \label{fig:4}
+    \end{center}
+    \end{figure}
+\par
+
+
+
+
+
+
+\section{生成式对抗网络实现}
+本部分由图片生成视频位于附件中。\par 
+\subsection{GAN}
+GAN的收敛较慢、且最不稳定。\par
+\begin{figure}[H]
+    \centering
+    \subfigure[GAN 1]{
+        \includegraphics[width=0.3\textwidth]{"GAN1".png}
+    }
+    \subfigure[GAN 2]{
+        \includegraphics[width=0.3\textwidth]{"GAN2".png}
+    }
+    \subfigure[GAN 3]{
+        \includegraphics[width=0.3\textwidth]{"GAN3".png}
+    }
+    \subfigure[GAN 4]{
+        \includegraphics[width=0.3\textwidth]{"GAN4".png}
+    }
+    \subfigure[GAN 5]{
+        \includegraphics[width=0.3\textwidth]{"GAN5".png}
+    }
+    \subfigure[GAN 6]{
+        \includegraphics[width=0.3\textwidth]{"GAN6".png}
+    }
+    \subfigure[GAN 7]{
+        \includegraphics[width=0.3\textwidth]{"GAN7".png}
+    }
+    \subfigure[GAN 8]{
+        \includegraphics[width=0.3\textwidth]{"GAN8".png}
+    }
+    \subfigure[GAN 9]{
+        \includegraphics[width=0.3\textwidth]{"GAN9".png}
+    }
+    \caption{GAN Train Process}
+    \label{fig:5}
+\end{figure}
+观察实验结果发现，GAN的训练过程中存在收敛不稳定，模式坍塌等问题，例如图GAN 6中无法生成M的最右侧，且在图GAN 8收敛时，仍有趋于不稳定的迹象，如图GAN 9.  \par 
+
+
+
+\subsection{WGAN}
+WGAN的收敛相较于GAN较快，且较为稳定。
+\begin{figure}[H]
+    \centering
+    \subfigure[GAN 1]{
+        \includegraphics[width=0.3\textwidth]{"WGAN1".png}
+    }
+    \subfigure[GAN 2]{
+        \includegraphics[width=0.3\textwidth]{"WGAN2".png}
+    }
+    \subfigure[GAN 3]{
+        \includegraphics[width=0.3\textwidth]{"WGAN3".png}
+    }
+    \subfigure[GAN 4]{
+        \includegraphics[width=0.3\textwidth]{"WGAN4".png}
+    }
+    \subfigure[GAN 5]{
+        \includegraphics[width=0.3\textwidth]{"WGAN5".png}
+    }
+    \subfigure[GAN 6]{
+        \includegraphics[width=0.3\textwidth]{"WGAN6".png}
+    }
+    \subfigure[GAN 7]{
+        \includegraphics[width=0.3\textwidth]{"WGAN7".png}
+    }
+    \subfigure[GAN 8]{
+        \includegraphics[width=0.3\textwidth]{"WGAN8".png}
+    }
+    \subfigure[GAN 9]{
+        \includegraphics[width=0.3\textwidth]{"WGAN9".png}
+    }
+    \caption{WGAN Train Process}
+    \label{fig:6}
+\end{figure}
+WGAN的收敛较为稳定，模式坍塌等问题相较于GAN也有提升。\par
+
+
+\subsection{WGAN-GP}
+WGAN-GP收敛最快，且最稳定。
+\begin{figure}[H]
+    \centering
+    \subfigure[GAN 1]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP1".png}
+    }
+    \subfigure[GAN 2]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP2".png}
+    }
+    \subfigure[GAN 3]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP3".png}
+    }
+    \subfigure[GAN 4]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP4".png}
+    }
+    \subfigure[GAN 5]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP5".png}
+    }
+    \subfigure[GAN 6]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP6".png}
+    }
+    \subfigure[GAN 7]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP7".png}
+    }
+    \subfigure[GAN 8]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP8".png}
+    }
+    \subfigure[GAN 9]{
+        \includegraphics[width=0.3\textwidth]{"WGAN-GP9".png}
+    }
+    \caption{WGAN-GP Train Process}
+    \label{fig:7}
+\end{figure}
+WGAN-GP的收敛最稳定，且模式坍塌问题基本没有出现，在第一次较拟合M后，基本没有出现问题。\par
+
+\section{隐空间语义搜索}
+
+\subsection{相关原理}
+GAN的隐空间中蕴含丰富的语义信息，
+传统的方法为了识别出这样的潜在语义通常采用一种有监督的学习方法，
+但是这样的方法需要对语义的清晰定义且对人工标注要求高，严重限制了应用。\par 
+周博磊团队提出无监督的方法SeFa\cite{shen2021closed}.\par 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"SeFa1".png}
+    \caption{Two different types of generator}
+    \label{fig:8}
+    \end{center}
+    \end{figure}
+\par
+对于GAN的生成器G，
+一般的GAN生成过程为先从隐空间$Z{\in}\mathcal{R}^{d}$中采样得到$d$维向量$z$.
+通过生成器，生成图像$I{\in}\mathcal{R}^{H{\times}W{\times}C}$。
+而在生成器内部，$z$先是通过一个全连接层FC，得到一个$m$维向量$y$，再分别经由两种不同的方法进入DNN.\par 
+传统方法是直接将$y$输入DNN，而style-based方法则是将$y$和style codes结合输入，
+将生成过程重新表示为$I=G^{'}(FC(z))=G^{'}(y)$，
+其中$G^{'}(\cdot)$表示生成器除了一开始的可学习FC层的剩下部分。\par 
+
+之前的工作已经展示了隐空间丰富的语义信息可以通过向量的算术性质来改变，$z^{'}=z+{\alpha}n$.
+其中$\alpha$为步长，$n{\in}\mathcal{R}^{d}$为一个方向向量对应于某个特定的语义，
+通过改变$n$，我们可以改变输出$I$。
+这里做出假设，对于$n$的较大改变也会造成$n$的较大改变。
+因此目标就是找到某些$n$能造成$y$的较大改变。\par 
+实验中，只需要选取$w^{T}w$的前k个特征向量，将其乘步长加在directions上。
+
+\subsection{实验效果}
+本部分的实现效果如下图所示，视频位于附件。
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"frame0".png}
+    \caption{frame 0}
+    \label{fig:9}
+    \end{center}
+    \end{figure}
+\par
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"frame1".png}
+    \caption{frame 1}
+    \label{fig:10}
+    \end{center}
+    \end{figure}
+\par
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"frame2".png}
+    \caption{frame 2}
+    \label{fig:11}
+    \end{center}
+    \end{figure}
+\par
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"frame3".png}
+    \caption{frame 3}
+    \label{fig:12}
+    \end{center}
+    \end{figure}
+\par
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"frame4".png}
+    \caption{frame 4}
+    \label{fig:13}
+    \end{center}
+    \end{figure}
+\par
+
+
+
+\bibliographystyle{unsrt} 
+\bibliography{refs}
+
+
+\end{document}
+
+
+
+
+
+

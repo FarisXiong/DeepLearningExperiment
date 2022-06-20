@@ -1,0 +1,27 @@
+\begin{thebibliography}{1}
+
+\bibitem{goodfellow2014generative}
+Ian Goodfellow, Jean Pouget-Abadie, Mehdi Mirza, Bing Xu, David Warde-Farley,
+  Sherjil Ozair, Aaron Courville, and Yoshua Bengio.
+\newblock Generative adversarial nets.
+\newblock {\em Advances in neural information processing systems}, 27, 2014.
+
+\bibitem{arjovsky2017wasserstein}
+Martin Arjovsky, Soumith Chintala, and L{\'e}on Bottou.
+\newblock Wasserstein generative adversarial networks.
+\newblock In {\em International conference on machine learning}, pages
+  214--223. PMLR, 2017.
+
+\bibitem{gulrajani2017improved}
+Ishaan Gulrajani, Faruk Ahmed, Martin Arjovsky, Vincent Dumoulin, and Aaron~C
+  Courville.
+\newblock Improved training of wasserstein gans.
+\newblock {\em Advances in neural information processing systems}, 30, 2017.
+
+\bibitem{shen2021closed}
+Yujun Shen and Bolei Zhou.
+\newblock Closed-form factorization of latent semantics in gans.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and
+  Pattern Recognition}, pages 1532--1540, 2021.
+
+\end{thebibliography}
