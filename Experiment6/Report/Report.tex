@@ -1,0 +1,109 @@
+\documentclass[UTF8]{ctexart}
+\usepackage{dirtree}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{float}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+
+\title{深度学习实验六} 
+\author{1190200708 熊峰} 
+\date{\today}
+\begin{document} 
+\maketitle 
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{环境配置}
+\subsection{硬件配置}
+CPU : Intel(R) Xeon(R) Silver 4214 \par
+GPU : TITAN RTX 24G \par
+MEM : 128G RAM  \par
+\subsection{软件配置}
+OS : Ubuntu 20.04.1 LTS \par
+PyTorch : Stable 1.11.0  CUDA 11.3 \par
+IDE : PyCharm 2021.3.2 \par
+
+\section{实验选题}
+实验选题为kaggle上Featured Code Competition，题目为\href{https://www.kaggle.com/competitions/us-patent-phrase-to-phrase-matching/overview}{U.S. Patent Phrase to Phrase Matching}.\par 
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"theme".png}
+    \caption{Theme}
+    \label{fig:1}
+    \end{center}
+    \end{figure}
+\par
+
+\section{数据}
+\subsection{训练数据}
+训练数据如下图所示，对于给定的anchor和target，给出其相匹配的程度，例如，如果一项发明声称是“电视机”，而先前的出版物描述了“电视机”，那么理想情况下，模型会识别出这两者是相同的，并帮助专利律师或审查员检索相关文件。\par 
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"train".png}
+    \caption{Train Data}
+    \label{fig:2}
+    \end{center}
+    \end{figure}
+\par
+
+\subsection{测试数据}
+测试数据如下图所示，需要给出anchor和target的相关程度，并给出了相关的上下文的符号。\par 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"test".png}
+    \caption{Test Data}
+    \label{fig:3}
+    \end{center}
+    \end{figure}
+\par
+
+\section{解决方案}
+\subsection{数据处理}
+将test中的anchor和target连接到Cooperative Patent Classification Codes Meaning数据中，获取相关的上下文信息，并构建dataset。\par 
+采样数据的分布，使用DeBerta分词器对待分类的句子分词，分词后的数据分布如下:\par 
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=12cm]{\string"statics".png}
+    \caption{Statics}
+    \label{fig:4}
+    \end{center}
+    \end{figure}
+\par
+在后续处理中，将句子截断为100，对不足100的补齐。\par 
+
+\subsection{相关优化}
+使用K折交叉验证对训练过程优化，实验中选取K为5。
+\subsection{模型选择}
+模型主要选用DeBerta\cite{he2020deberta}，它主要提出了两点改进：解耦注意力机制和增强的mask解码器。\par 
+解耦注意力: 与BERT不同，在BERT中，输入层中的每个单词都使用一个向量来表示，该向量是其单词(内容)嵌入和位置嵌入的总和， 单词间的权重分别根据其内容和相对位置使用解耦的矩阵进行计算。 这是由于观察到一个单词对的注意力权重不仅取决于它们的内容，而且还取决于它们的相对位置。 例如，单词“deep”和“learning”相邻时的的关系要强于出现在不同句子中。\par 
+增强的mask解码器: 与BERT一样，DeBERTa也使用mask语言模型(MLM)进行了预训练。 MLM是一项填空任务，在该任务中，模型被教导要使用mask token周围的单词来预测mask的单词应该是什么。 DeBERTa将上下文的内容和位置信息用于MLM。解耦注意力机制已经考虑了上下文词的内容和相对位置，但没有考虑这些词的绝对位置，这在很多情况下对于预测至关重要。考虑一下句子“a new store opened beside the new mall”，其斜体字“store”和“mall”被mask以进行预测。尽管两个单词的局部上下文相似，但是它们在句子中扮演的句法作用不同。 (这里，句子的主题是“store”而不是“mall”。)这些句法上的细微差别在很大程度上取决于单词在句子中的绝对位置，因此考虑单词在语言模型中的绝对位置是很重要的。DeBERTa在softmax层之前合并了绝对单词位置嵌入，在该模型中，模型根据词内容和位置的聚合上下文嵌入对Masked单词进行解码。\par 
+
+
+
+\section{实验结果}
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=14cm]{\string"score".png}
+    \caption{Score}
+    \label{fig:5}
+    \end{center}
+    \end{figure}
+\par
+在实验中先后尝试了多种优化，最高得分为0.8395，排名497/1819.
+
+
+\bibliographystyle{unsrt} 
+\bibliography{refs}
+
+\end{document}
+
+
+
+
+
+

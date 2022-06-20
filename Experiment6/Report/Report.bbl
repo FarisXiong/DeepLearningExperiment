@@ -1,0 +1,8 @@
+\begin{thebibliography}{1}
+
+\bibitem{he2020deberta}
+Pengcheng He, Xiaodong Liu, Jianfeng Gao, and Weizhu Chen.
+\newblock Deberta: Decoding-enhanced bert with disentangled attention.
+\newblock {\em arXiv preprint arXiv:2006.03654}, 2020.
+
+\end{thebibliography}
