@@ -36,7 +36,7 @@ class cnnConfig(config):
         super(cnnConfig, self).__init__()
         # CNN网络相关配置
         self.out_channels = 64  # 卷积输出通道数
-        self.filter_size = 4  # 定义卷积核的size
+        self.filter_size = 3  # 定义卷积核的size
         self.hidden_size = 1024  # 隐藏层大小
         self.save_model_path = '../Models/CNN1.ckpt'  # 模型保存路径
 
